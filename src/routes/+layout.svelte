@@ -1,19 +1,20 @@
 <script lang="ts">
     import { type Snippet } from "svelte";
-    import type { NavRoute } from "$lib/types";
+    import { page } from "$app/state";
 
     let { children }: { children: Snippet } = $props();
 
-    let currentRoute = $state<NavRoute>("dashboard");
-
-    function navigateTo(route: NavRoute) {
-        currentRoute = route;
+    function isActive(path: string): boolean {
+        if (path === "/") {
+            return page.url.pathname === "/";
+        }
+        return page.url.pathname.startsWith(path);
     }
 </script>
 
 <div class="app-container">
     <header data-tauri-drag-region class="tauri-header">
-        <div class="window-title">Quarks</div>
+        <div class="window-title">Quarks — Atomic Habits</div>
     </header>
 
     <div class="layout-body">
@@ -23,11 +24,7 @@
             </div>
 
             <nav class="nav-menu">
-                <button
-                    class="nav-item"
-                    class:active={currentRoute === "dashboard"}
-                    onclick={() => navigateTo("dashboard")}
-                >
+                <a href="/" class="nav-item" class:active={isActive("/")}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -38,17 +35,19 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        ><path
+                    >
+                        <path
                             d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-                        /><polyline points="9 22 9 12 15 12 15 22" /></svg
-                    >
+                        />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
                     <span>Dashboard</span>
-                </button>
+                </a>
 
-                <button
+                <a
+                    href="/scorecard"
                     class="nav-item"
-                    class:active={currentRoute === "info"}
-                    onclick={() => navigateTo("info")}
+                    class:active={isActive("/scorecard")}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -60,12 +59,41 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        ><circle cx="12" cy="12" r="10" /><path
-                            d="M12 16v-4"
-                        /><path d="M12 8h.01" /></svg
                     >
+                        <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                        <path
+                            d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                        />
+                        <path d="M12 11h4" />
+                        <path d="M12 16h4" />
+                        <path d="M8 11h.01" />
+                        <path d="M8 16h.01" />
+                    </svg>
+                    <span>Scorecard</span>
+                </a>
+
+                <a
+                    href="/info"
+                    class="nav-item"
+                    class:active={isActive("/info")}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4" />
+                        <path d="M12 8h.01" />
+                    </svg>
                     <span>Info</span>
-                </button>
+                </a>
             </nav>
 
             <div class="sidebar-footer">
@@ -92,6 +120,10 @@
         --aquamarine-primary: #14b8a6;
         --aquamarine-light: #2dd4bf;
         --aquamarine-glow: rgba(20, 184, 166, 0.15);
+
+        --score-positive: #10b981;
+        --score-negative: #ef4444;
+        --score-neutral: #6b7280;
     }
 
     :global(body) {
@@ -154,6 +186,14 @@
         padding: 0 8px;
     }
 
+    .brand-icon {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: var(--aquamarine-primary);
+        box-shadow: 0 0 10px var(--aquamarine-primary);
+    }
+
     .brand-name {
         font-size: 1.25rem;
         font-weight: 700;
@@ -180,6 +220,7 @@
         color: var(--text-secondary);
         font-size: 0.9rem;
         font-weight: 500;
+        text-decoration: none;
         cursor: pointer;
         transition: all 0.2s ease;
     }
