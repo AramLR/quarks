@@ -14,7 +14,7 @@
 
 <div class="app-container">
     <header data-tauri-drag-region class="tauri-header">
-        <div class="window-title">Quarks — Atomic Habits</div>
+        <div class="window-title">Quarks</div>
     </header>
 
     <div class="layout-body">

@@ -5,7 +5,6 @@
 
   const habitService = HabitService.getInstance();
 
-  // Estado reactivo de Svelte 5
   let habits = $state<Habit[]>([]);
   let newHabitName = $state("");
 
@@ -41,11 +40,10 @@
 
 <div class="habit-manager">
   <header class="section-header">
-    <h2>Mis Hábitos Atómicos</h2>
-    <p>Construye rutinas incrementando tu racha día a día.</p>
+    <h2>My Habits</h2>
+    <p>Build a routine increasing your streak each day.</p>
   </header>
 
-  <!-- Formularios de creación rápida -->
   <form
     class="create-form"
     onsubmit={(e) => {
@@ -55,14 +53,13 @@
   >
     <input
       type="text"
-      placeholder="Ej: Leer 5 páginas de un libro"
+      placeholder="Read 5 pages of a book"
       bind:value={newHabitName}
       class="input-habit"
     />
-    <button type="submit" class="btn-primary">Crear Hábito</button>
+    <button type="submit" class="btn-primary">Create Habit</button>
   </form>
 
-  <!-- Lista de Hábitos -->
   <div class="habit-list">
     {#each habits as habit (habit.id)}
       <div class="habit-card">
@@ -70,26 +67,26 @@
           <h3>{habit.name}</h3>
           <div class="metrics">
             <span class="badge"
-              >Repeticiones: <strong>{habit.repetitions}</strong></span
+              >Repetitions: <strong>{habit.repetitions}</strong></span
             >
             <span class="badge streak"
-              >Racha actual: <strong>🔥 {habit.currentStreak} días</strong
+              >Current streak: <strong>🔥 {habit.currentStreak} días</strong
               ></span
             >
           </div>
         </div>
         <div class="actions">
           <button class="btn-complete" onclick={() => handleComplete(habit)}>
-            ✓ Completar
+            ✓ Complete
           </button>
           <button class="btn-delete" onclick={() => handleDelete(habit.id)}>
-            Eliminar
+            Delete
           </button>
         </div>
       </div>
     {:else}
       <p class="empty-state">
-        No tienes hábitos registrados aún. ¡Empieza creando el primero!
+        You have not registered any habit yet. Begin by creating the first one!
       </p>
     {/each}
   </div>
