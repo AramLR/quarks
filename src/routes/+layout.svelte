@@ -97,7 +97,7 @@
             </nav>
 
             <div class="sidebar-footer">
-                <span class="version-tag">Development version</span>
+                <span class="version-tag">1.0.0-dev.1</span>
             </div>
         </aside>
 

@@ -8,6 +8,9 @@
   "permissions": [
     "core:default",
     "opener:default",
-    "store:default"
+    "store:default",
+    "core:app:default",
+    "core:app:allow-version",
+    "core:app:allow-name"
   ]
 }

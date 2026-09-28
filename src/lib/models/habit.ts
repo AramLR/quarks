@@ -3,7 +3,7 @@ export interface HabitJSON {
     name: string;
     repetitions: number;
     currentStreak: number;
-    lastCompletedDate?: string; // Formato YYYY-MM-DD
+    lastCompletedDate?: string;
     cue?: string;
     craving?: string;
     response?: string;
@@ -34,12 +34,20 @@ export class Habit {
         this.reward = data.reward || '';
     }
 
-    public complete(): void {
+    public get isCompletedToday(): boolean {
+        if (!this.lastCompletedDate) return false;
+        const today = new Date().toISOString().split('T')[0];
+        return this.lastCompletedDate === today;
+    }
+
+    public clone(): Habit {
+        return Habit.fromJSON(this.toJSON());
+    }
+
+    public complete(): Habit {
         const today = new Date().toISOString().split('T')[0];
 
-        if (this.lastCompletedDate === today) {
-            return;
-        }
+        if (this.isCompletedToday) return this;
 
         if (this.isStreakActive()) {
             this.currentStreak += 1;
@@ -49,6 +57,18 @@ export class Habit {
 
         this.repetitions += 1;
         this.lastCompletedDate = today;
+
+        return this;
+    }
+
+    public undoComplete(): Habit {
+        if (!this.isCompletedToday) return this;
+
+        this.repetitions = Math.max(0, this.repetitions - 1);
+        this.currentStreak = Math.max(0, this.currentStreak - 1);
+        this.lastCompletedDate = undefined;
+
+        return this;
     }
 
     private isStreakActive(): boolean {
